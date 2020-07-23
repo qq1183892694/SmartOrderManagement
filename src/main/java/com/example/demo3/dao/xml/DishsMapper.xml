@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo3.dao.DishsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo3.entity.Dishs">
+        <id column="dishId" property="dishId" />
+        <result column="dishName" property="dishName" />
+        <result column="dishIntroduction" property="dishIntroduction" />
+        <result column="dishDetails" property="dishDetails" />
+        <result column="isRecommend" property="isRecommend" />
+        <result column="dishPrice" property="dishPrice" />
+        <result column="dishAvatarPath" property="dishAvatarPath" />
+    </resultMap>
+
+</mapper>
