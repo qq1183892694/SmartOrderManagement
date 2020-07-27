@@ -1,12 +1,9 @@
 package com.example.demo3.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -20,9 +17,12 @@ import java.io.Serializable;
 @TableName("Dishs")
 public class Dishs{
 
+    /**
+     * 我更改了dishId为Int型，原来是String
+     */
     @TableId("dishId")
     @TableField("dishId")
-    private String dishId;
+    private int dishId;
 
     @TableField("dishName")
     private String dishName;
@@ -37,11 +37,11 @@ public class Dishs{
     @TableField("dishAvatarPath")
     private String dishAvatarPath;
 
-    public String getDishId() {
+    public int getDishId() {
         return dishId;
     }
 
-    public void setDishId(String dishId) {
+    public void setDishId(int dishId) {
         this.dishId = dishId;
     }
     public String getDishName() {

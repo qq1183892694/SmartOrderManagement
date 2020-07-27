@@ -13,4 +13,28 @@
         <result column="dishAvatarPath" property="dishAvatarPath" />
     </resultMap>
 
+
+<!--    <insert id="saveDishInfo" parameterType="BaseResultMap" >-->
+<!--        insert into Dishs (dishName,dishIntroduction,dishDetails,isRecommend,dishPrice,dishAvatarPath)-->
+<!--        values (#{dishName},#{dishIntroduction},#{dishDetails},#{isRecommend},#{dishPrice},#{dishAvatarPath})-->
+<!--    </insert>-->
+
+    <insert id="saveDishInfo" parameterType="Dishs" >
+        insert into Dishs(dishName,dishDetails,dishPrice)
+        values(#{dishName},#{dishDetails},#{dishPrice})
+    </insert>
+
+    <update id="updataDishInfo" parameterType="Dishs">
+		update
+		Dishs set dishName = #{dishName} ,
+		dishIntroduction = #{dishIntroduction} ,
+		dishDetails = #{dishDetails}
+		isRecommend = #{isRecommend}
+		dishPrice = #{dishPrice}
+		dishAvatarPath = #{dishAvatarPath}
+		where dishId = #{dishId}
+	</update>
+
+
+
 </mapper>

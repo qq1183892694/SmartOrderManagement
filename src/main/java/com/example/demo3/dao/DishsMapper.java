@@ -15,4 +15,18 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface DishsMapper extends BaseMapper<Dishs> {
 
+    /**
+     * 添加菜品
+     * @param dishs
+     */
+    void saveDishInfo(Dishs dishs);
+
+    /**
+     * 更新菜品
+     * @param dishs
+     */
+    void updataDishInfo(Dishs dishs);
+
+
+
 }

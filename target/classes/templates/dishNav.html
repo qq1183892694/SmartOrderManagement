@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link th:href="/css/csss.css" th:rel="stylesheet">
+
+<!--菜品管理页的通用导航栏-->
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="dishsNav" th:fragment="dishsNav">
+            <ul class="nav nav-tabs" >
+                <li>
+                    <a th:class="${dishfalt==11?'nav-link active':'nav-link'}" th:href="@{/DishsController/dishs}">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        菜品主页<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:class="${dishfalt==12?'nav-link active':'nav-link'}" th:href="@{/DishsController/uploadDishs}">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        添加菜品<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:class="${dishfalt==13?'nav-link active':'nav-link'}" th:href="@{/DishsController/test}">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        待定页面<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <form class="navbar-form navbar-left" role="search" th:action="@{/DishsController/selectDishs}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="根据菜菜品编号搜索菜品" name="dishsName" id="dishsName">
+                    </div>
+                    <button type="submit" class="btn-success">搜索</button>
+                </form>
+            </ul>
+
+
+        </div>
+    </div>
+
+</nav>
+
+</body>
+
+</html>

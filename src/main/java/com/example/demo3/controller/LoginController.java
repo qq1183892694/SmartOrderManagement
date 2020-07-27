@@ -23,7 +23,7 @@ public class LoginController {
         System.out.println(password);
         if(usersService.selectById(Loginname)!=null)
         {
-//            System.out.println(usersService.selectById(Loginname).getUserPassword());
+            //           System.out.println(usersService.selectById(Loginname).getUserPassword());
 //            System.out.println(password);
             if (usersService.selectById(Loginname).getUserPassword().equals(password))
             {
