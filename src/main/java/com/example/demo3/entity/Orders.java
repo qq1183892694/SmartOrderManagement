@@ -19,18 +19,29 @@ import java.io.Serializable;
  */
 @Data
 @TableName("Orders")
-public class Orders {
+
+public class Orders{
     @TableId("orderId")
     @TableField("orderId")
     private String orderId;
     @TableField("orderDate")
-    private Date orderDate;
+    private String orderDate;
     @TableField("orderTable")
     private String orderTable;
     @TableField("orderPrice")
     private Double orderPrice;
     @TableField("orderUserId")
     private String orderUserId;
+    @TableField("orderStatus")
+    private String orderStatus;
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -39,11 +50,11 @@ public class Orders {
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-    public Date getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
     public String getOrderTable() {
@@ -71,11 +82,12 @@ public class Orders {
     @Override
     public String toString() {
         return "Orders{" +
-        "orderId=" + orderId +
-        ", orderDate=" + orderDate +
-        ", orderTable=" + orderTable +
-        ", orderPrice=" + orderPrice +
-        ", orderUserId=" + orderUserId +
-        "}";
+                "orderId='" + orderId + '\'' +
+                ", orderDate=" + orderDate +
+                ", orderTable='" + orderTable + '\'' +
+                ", orderPrice=" + orderPrice +
+                ", orderUserId='" + orderUserId + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                '}';
     }
 }

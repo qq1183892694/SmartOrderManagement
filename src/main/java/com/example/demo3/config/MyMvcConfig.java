@@ -15,12 +15,12 @@ public class MyMvcConfig implements WebMvcConfigurer {
 //        registry.addViewController("main").setViewName("dashboard");
         //重定向
     }
-
-////配置登录拦截器,注意css只有一层
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new com.example.demo3.config.LoginHandlerinterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/index.html","/LoginController/login","/order/add","/main","/css/*","/js/**","/img/**"); //配置登录拦截器,注意css只有一层
-    }
+//
+//////配置登录拦截器,注意css只有一层
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new com.example.demo3.config.LoginHandlerinterceptor())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/index.html","/LoginController/login","/order/add","/main","/css/*","/js/**","/img/**"); //配置登录拦截器,注意css只有一层
+//    }
 }

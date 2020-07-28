@@ -9,6 +9,7 @@
         <result column="orderTable" property="orderTable" />
         <result column="orderPrice" property="orderPrice" />
         <result column="orderUserId" property="orderUserId" />
+        <result column="orderStatus" property="orderStatus" />
     </resultMap>
 
 </mapper>

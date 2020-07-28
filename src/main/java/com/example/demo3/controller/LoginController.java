@@ -21,26 +21,27 @@ public class LoginController {
     {
         System.out.println(Loginname);
         System.out.println(password);
-        if(usersService.selectById(Loginname)!=null)
-        {
-            //           System.out.println(usersService.selectById(Loginname).getUserPassword());
-//            System.out.println(password);
-            if (usersService.selectById(Loginname).getUserPassword().equals(password))
-            {
-                session.setAttribute("loginUser",Loginname);
-                return "redirect:/OrdersController/order";
-            }
-            else
-            {
-                model.addAttribute("msg","密码错误！");
-                return  "index";
-            }
-        }
-        else
-        {
-            model.addAttribute("msg","用户名错误！");
-            return  "index";
-        }
+        return "redirect:/OrdersController/order";
+//        if(usersService.selectById(Loginname)!=null)
+//        {
+//            //           System.out.println(usersService.selectById(Loginname).getUserPassword());
+////            System.out.println(password);
+//            if (usersService.selectById(Loginname).getUserPassword().equals(password))
+//            {
+//                session.setAttribute("loginUser",Loginname);
+//                return "redirect:/OrdersController/order";
+//            }
+//            else
+//            {
+//                model.addAttribute("msg","密码错误！");
+//                return  "index";
+//            }
+//        }
+//        else
+//        {
+//            model.addAttribute("msg","用户名错误！");
+//            return  "index";
+//        }
     }
     @RequestMapping("/logout")
     public  String logout(HttpSession session)

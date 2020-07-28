@@ -4,6 +4,8 @@ spring:
     password: root
     url: jdbc:mysql://47.98.248.3:3306/SmartOrderManagement?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF8
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 500000
 mybatis:
   type-aliases-package: com.example.demo.pojo
   mapper-locations: classpath:./java/com/example/demo/dao/xml/*.xml
