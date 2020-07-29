@@ -33,6 +33,20 @@ public class OrderDetailsController {
     @Autowired
     private IOrdersService ordersService;
 
+
+    @GetMapping("/orders/{id}")//订单详情页
+    public String onlyGetDetailList(@PathVariable("id")String id , Model model){
+        EntityWrapper<OrderDetails> wrapper = new EntityWrapper<>();
+        wrapper.eq("orderId",id);
+        List<OrderDetails> orderDetailList = orderDetailsService.selectList(wrapper);
+//        OrderDetail orderDetail=orderDetailService.selectById(id);
+        model.addAttribute("orderId",id);
+        model.addAttribute("orderDetail",orderDetailList);
+        model.addAttribute("falt",2);
+        return "detail/onlylist";
+    }
+
+
     @GetMapping("/order/{id}")//点击结账之后显示账单的详情
     public String getDetailList(@PathVariable("id")String id , Model model){
         EntityWrapper<OrderDetails> wrapper = new EntityWrapper<>();
@@ -55,12 +69,6 @@ public class OrderDetailsController {
         System.out.println(orders);
         ordersService.deleteById(id);
         ordersService.insert(orders);
-//        order.forEach(item->{
-//            Orders orders = new Orders();
-//            item.setOrderStatus("1");
-//            ordersService.deleteById(id);
-//            ordersService.insert(orders);
-//        });
 
 
         model.addAttribute("falt",5);

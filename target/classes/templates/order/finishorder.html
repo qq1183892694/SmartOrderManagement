@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>查看经营数据</title>
+    <title>结账界面</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -71,7 +71,7 @@
 
                         <td th:text="${OrderForm.getOrderDate()}"></td>
                         <td th:text="${OrderForm.getOrderUserId()}"></td>
-                        <td th:text="${OrderForm.getOrderStatus()}"></td>
+                        <td th:text="${OrderForm.getOrderStatus()=='0'?'未结账':'已结账'}"></td>
                         <td>
                             <a class="btn-sm btn-primary" th:href="@{'/OrderDetailsController/order/'+${OrderForm.getOrderId()}}">结账</a>
                         </td>

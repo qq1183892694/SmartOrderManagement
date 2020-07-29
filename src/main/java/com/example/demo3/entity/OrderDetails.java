@@ -19,7 +19,9 @@ import java.io.Serializable;
 @Data
 @TableName("OrderDetails")
 public class OrderDetails {
-    @TableId("dishId")
+    @TableId("id")
+    @TableField("id")
+    private String id;
     @TableField("dishId")
     private String dishId;
     @TableField("orderId")
@@ -30,6 +32,34 @@ public class OrderDetails {
     private String dishNumber;
     @TableField("dishPrice")
     private Double dishPrice;
+    @TableField("dishStatus")
+    private String dishStatus;
+    @TableField("orderTable")
+    private String orderTable;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOrderTable() {
+        return orderTable;
+    }
+
+    public void setOrderTable(String orderTable) {
+        this.orderTable = orderTable;
+    }
+
+    public String getDishStatus() {
+        return dishStatus;
+    }
+
+    public void setDishStatus(String dishStatus) {
+        this.dishStatus = dishStatus;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -71,11 +101,14 @@ public class OrderDetails {
     @Override
     public String toString() {
         return "OrderDetails{" +
-        "orderId=" + orderId +
-        ", dishId=" + dishId +
-        ", dishName=" + dishName +
-        ", dishNumber=" + dishNumber +
-        ", dishPrice=" + dishPrice +
-        "}";
+                "id='" + id + '\'' +
+                ", dishId='" + dishId + '\'' +
+                ", orderId='" + orderId + '\'' +
+                ", dishName='" + dishName + '\'' +
+                ", dishNumber='" + dishNumber + '\'' +
+                ", dishPrice=" + dishPrice +
+                ", dishStatus='" + dishStatus + '\'' +
+                ", orderTable='" + orderTable + '\'' +
+                '}';
     }
 }

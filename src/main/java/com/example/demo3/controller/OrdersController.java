@@ -11,6 +11,7 @@ import com.example.demo3.service.IOrderDetailsService;
 import com.example.demo3.service.IOrderGoodListService;
 import com.example.demo3.service.IOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,11 @@ import org.springframework.stereotype.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -48,6 +52,13 @@ public class OrdersController {
 
     @RequestMapping("/orders")//显示订单列表
     public String getOrderList(Model model){
+        //首先得把购物单给清空
+        EntityWrapper<OrderGoodList> wrapper1 = new EntityWrapper<>();
+        List<OrderGoodList> ordergoodsList = orderGoodListService.selectList(wrapper1);
+        ordergoodsList.forEach(item->{
+            orderGoodListService.deleteById(item.getId());
+        });
+
         EntityWrapper<Orders> wrapper = new EntityWrapper<>();
         List<Orders> orders = ordersService.selectList(wrapper);
 
@@ -58,9 +69,17 @@ public class OrdersController {
     @GetMapping("/order")//跳转到服务员点餐界面
     public  String toAddpage(Model model)
     {
+        //加载购物车中的商品
+        EntityWrapper<OrderGoodList> wrapper = new EntityWrapper<>();
+        List<OrderGoodList> ordergoodsList = orderGoodListService.selectList(wrapper);
+//        orderGoodListService.通过mybatis获取表中数据条数以及金额总和并且返回至前端页面
+        EntityWrapper<Dishs> wrapper1 = new EntityWrapper<>();
+        List<Dishs> goodsList = dishsService.selectList(wrapper1);
+        model.addAttribute("ordergoodlist",ordergoodsList);
+        model.addAttribute("count",ordergoodsList.size());
+        double sum= ordergoodsList.stream().mapToDouble(OrderGoodList::getDishPrice).sum();
+        model.addAttribute("sum",sum);
         model.addAttribute("falt",4);
-        model.addAttribute("count", "0");
-        model.addAttribute("sum", 0.0);
         return "order/add";
     }
     @RequestMapping("/searchGood")//在购物单页面查询商品
@@ -90,7 +109,7 @@ public class OrdersController {
             //显示购物单信息
 
             Dishs goodsList = dishsService.selectById(attribute);
-            model.addAttribute("goods",goodsList);
+            model.addAttribute("dishs",goodsList);
 
             EntityWrapper<OrderGoodList> wrapper2 = new EntityWrapper<>();
             List<OrderGoodList> ordergoodsList = orderGoodListService.selectList(wrapper2);
@@ -121,7 +140,7 @@ public class OrdersController {
         orderGoodList.setDishPrice(dishs.getDishPrice());
 
         orderGoodListService.insert(orderGoodList);
-        return "redirect:/OrdersController/searchGood";
+        return "redirect:/OrdersController/ordergoodlist";
     }
 
     @RequestMapping("/ordergoodlist")
@@ -133,7 +152,7 @@ public class OrdersController {
 //        orderGoodListService.通过mybatis获取表中数据条数以及金额总和并且返回至前端页面
         EntityWrapper<Dishs> wrapper1 = new EntityWrapper<>();
         List<Dishs> goodsList = dishsService.selectList(wrapper1);
-        model.addAttribute("goods",goodsList);
+        model.addAttribute("dishs",goodsList);
         model.addAttribute("ordergoodlist",ordergoodsList);
         model.addAttribute("count",ordergoodsList.size());
         double sum= ordergoodsList.stream().mapToDouble(OrderGoodList::getDishPrice).sum();
@@ -186,11 +205,14 @@ public class OrdersController {
 
             ordergoodsList.forEach((item) -> {
                 OrderDetails orderDetail = new OrderDetails();
+                orderDetail.setId(item.getId());
                 orderDetail.setDishName(item.getDishName());
                 orderDetail.setDishId(item.getDishId());
                 orderDetail.setDishPrice(item.getDishPrice());
                 orderDetail.setDishNumber("1");
                 orderDetail.setOrderId(String.valueOf(MilliSeconds));
+                orderDetail.setDishStatus("0");
+                orderDetail.setOrderTable(attribute);
                 orderDetailsService.insert(orderDetail);
                 orderGoodListService.deleteById(item.getId());
             });//把所有商品添加到详情表中去
@@ -211,22 +233,24 @@ public class OrdersController {
     @GetMapping("/finishorder")//餐桌结账部分
     public  String toAddpage2(Model model)
     {
-        EntityWrapper<Orders> wrapper = new EntityWrapper<>();
+        //首先得把购物单给清空
+        EntityWrapper<OrderGoodList> wrapper1 = new EntityWrapper<>();
+        List<OrderGoodList> ordergoodsList = orderGoodListService.selectList(wrapper1);
+        ordergoodsList.forEach(item->{
+            orderGoodListService.deleteById(item.getId());
+        });
 
-//        wrapper.eq(new Orders().getOrderStatus(),"0");
+
+        EntityWrapper<Orders> wrapper = new EntityWrapper<>();
         List<Orders> orders = ordersService.selectList(wrapper);
 
+        List<String> statusList = new ArrayList<String>();//创建一个list对状态进行筛选，在结账界面不显示已结账的订单
+        statusList.add("0");
+        orders = orders.stream().filter((Orders order) -> statusList.contains(order.getOrderStatus())).collect(Collectors.toList());
+//        wrapper.eq("0",new Orders().getOrderStatus());
         model.addAttribute("orders",orders);
         model.addAttribute("falt",5);
         return "order/finishorder";
-    }
-
-
-    @GetMapping("/orders3")
-    public  String toAddpage3(Model model)
-    {
-        model.addAttribute("falt",6);
-        return "preparedish/preparedish";
     }
 
 

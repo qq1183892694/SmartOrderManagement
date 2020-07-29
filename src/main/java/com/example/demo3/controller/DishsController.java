@@ -4,7 +4,9 @@ package com.example.demo3.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.demo3.entity.Dishs;
 import com.example.demo3.entity.ImgUrl;
+import com.example.demo3.entity.OrderGoodList;
 import com.example.demo3.service.IDishsService;
+import com.example.demo3.service.IOrderGoodListService;
 import com.example.demo3.util.DishServeCommon;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -39,6 +41,8 @@ import java.util.Random;
 public class DishsController {
     @Autowired
     private IDishsService dishsService;
+    @Autowired
+    private IOrderGoodListService orderGoodListService;
 
     /**
      * 进入菜品管理界面
@@ -47,6 +51,13 @@ public class DishsController {
      */
     @RequestMapping("/dishs")
     public String getGoodsList(Model model){
+        //首先得把购物单给清空
+        EntityWrapper<OrderGoodList> wrapper1 = new EntityWrapper<>();
+        List<OrderGoodList> ordergoodsList = orderGoodListService.selectList(wrapper1);
+        ordergoodsList.forEach(item->{
+            orderGoodListService.deleteById(item.getId());
+        });
+
         EntityWrapper<Dishs> wrapper = new EntityWrapper<>();
         List<Dishs> dishsList = dishsService.selectList(wrapper);
         model.addAttribute("dishs",dishsList);
@@ -62,6 +73,7 @@ public class DishsController {
     @RequestMapping("/uploadDishs")
     public String uploadDishs(Model model){
         model.addAttribute("dishfalt",12);
+        model.addAttribute("falt",3);
         return "dishs/dishs_upload";
     }
 
@@ -100,6 +112,7 @@ public class DishsController {
                               Model model){
         Dishs dishs = dishsService.selectById(dishId);
         model.addAttribute("dishs",dishs);
+        model.addAttribute("falt",3);
         return "dishs/NewPageDishs";
     }
 
@@ -140,9 +153,10 @@ public class DishsController {
      * @return
      */
     @PostMapping("/updataDishs")
-    public String updataDishs(Dishs dishs) {
+    public String updataDishs(Dishs dishs,Model model) {
         dishsService.update(dishs,new EntityWrapper<Dishs>().eq("dishId",dishs.getDishId()));
         //dishsService.updataDishInfo(dishs);
+        model.addAttribute("falt",3);
         return "redirect:/DishsController/dishs";
     }
 
@@ -152,8 +166,7 @@ public class DishsController {
      * @return
      */
     @RequestMapping("/deleteDishs/{id}")
-    public String editDishInfo(@PathVariable("id") int dishId
-                               ){
+    public String editDishInfo(@PathVariable("id") int dishId){
         dishsService.deleteById(dishId);
         return "redirect:/DishsController/dishs";
     }
@@ -168,6 +181,7 @@ public class DishsController {
     public String selectDishs(@RequestParam("dishsName") Integer dishsName,Model model){
         Dishs dishs = dishsService.selectById(dishsName);
         model.addAttribute("dishs",dishs);
+        model.addAttribute("falt",3);
         return "dishs/list";
     }
 

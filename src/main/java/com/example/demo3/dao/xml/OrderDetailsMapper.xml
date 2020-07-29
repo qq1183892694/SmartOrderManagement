@@ -4,11 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.demo3.entity.OrderDetails">
-        <id column="dishId" property="dishId" />
+        <id column="id" property="id" />
+        <result column="dishId" property="dishId" />
         <result column="orderId" property="orderId" />
         <result column="dishName" property="dishName" />
         <result column="dishNumber" property="dishNumber" />
         <result column="dishPrice" property="dishPrice" />
+        <result column="dishStatus" property="dishStatus" />
+        <result column="orderTable" property="orderTable" />
     </resultMap>
+
+
 
 </mapper>
