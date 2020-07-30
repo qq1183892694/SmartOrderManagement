@@ -60,6 +60,19 @@
         <div th:replace="~{commons::sidebar}"></div>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+            <div class="panel panel-default">
+                <div class="panel-heading alert alert-danger">
+                    <span class="panel-title">
+                        最新公告信息
+                    </span>
+                </div>
+                <span th:text="${proclamationid}" style="margin-left: 15px" ></span>
+            </div>
+            <br>
+            <div class="alert alert-danger" role="alert">
+                <span>顾客点餐列表</span>
+            </div>
             <form action="/OrdersController/searchGood" method="post">
                 <div class="form-inline row">
                     <input type="text" style="margin-left: 15px;width: 150px;height: 30px" name="Name"
@@ -90,7 +103,6 @@
                         <td width="100px" th:text="${dishsList.getDishDetails()}"></td>
                         <td th:text="${dishsList.getIsRecommend()==1?'特色菜品':''}"></td>
                         <td th:text="${dishsList.getDishPrice()}"></td>
-                        <!--								<td th:text="${#dates.format(OrderForm.getOrderFormDate(),'yyyy-MM-dd HH:mm:ss')}"></td>-->
                         <td>
                             <img th:src="${dishsList.getDishAvatarPath()}" style="object-fit:contain;width: 50px;height: 50px">
                         </td>

@@ -50,6 +50,38 @@
         <div th:replace="~{commons::sidebar}"></div>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="panel panel-default">
+                <div class="panel-heading alert alert-danger">
+                    <span class="panel-title">
+                        最新公告信息
+                    </span>
+                </div>
+                <span th:text="${proclamationid}" style="margin-left: 15px" ></span>
+            </div>
+            <br>
+            <div class="alert alert-danger" role="alert">
+                <span>未结账列表</span>
+            </div>
+
+            <form action="/OrdersController/searchOrder" method="post">
+                <div class="form-inline row">
+                    <div class="form-group" style="margin-left: 15px">
+                        <a>桌号：</a>
+                        <select class="form-control" name="TableId">
+                            <option>---</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                        </select>
+                    </div>
+                    <input type="submit" style="margin-left: 15px" class="btn btn-success" value="根据桌号查询"/>
+                </div>
+            </form>
+
+
             <div class="table-responsive" style="margin-top: 15px">
                 <table class="table table-striped table-sm">
                     <thead>
