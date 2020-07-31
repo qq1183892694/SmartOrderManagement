@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>员工管理</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-select.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div th:replace="~{commons::topbar}"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{commons::sidebar}"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form role="form" class="form-horizontal"  id="usersform" enctype="multipart/form-data" th:action="@{/UsersController/update}" method="post" >
+                <div class="row">
+                    <div class="col-6">
+                        <h1>用户信息：</h1>
+                        <input hidden="true" id="uid" name="uid" th:value="${user.getUserId()}"/>
+                        <div class="form-group">
+                            <label for="inputuser" class="col-sm-2 control-label">账号</label>
+                            <p class="text-danger" id="namsg"></p>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputuser"
+                                       name="username" placeholder="填写新账号" required="required" th:value="${user.getUserLoginName()}">
+                                <input hidden="true" id="oldname" th:value="${user.getUserLoginName()}"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-danger" id="selectmsg"></p>
+                            <select class="selectpicker" id="selectauthority" name="authorityid" data-style="btn-info" title="权限" >
+                                <option th:selected="${user.getCharacterId()}==1?true:false" value="1">餐厅管理员</option>
+                                <option th:selected="${user.getCharacterId()}==2?true:false" value="2">餐厅服务员</option>
+                                <option th:selected="${user.getCharacterId()}==3?true:false" value="3">后厨人员</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--                        头像-->
+                    <div class="col-6">
+                        <h1>头像设置</h1>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <img id="avatar" width="250px" height="250px"
+                                     style="object-fit:contain"
+                                     th:src="@{'/UsersController/getpic/'+${user.getUserAvatarPath()}}"
+                                >
+                            </div>
+                            <p for="avatar" class="col-sm-6 control-label">注意：图片大小250*250支持格式jpg/png</p>
+                        </div>
+                        <div class="col-6">
+                            <label for="avatarfile" class="btn btn-min btn-primary" type="submit" >上传头像</label>
+                            <input hidden="true" type="file" name="avatarfile"  id="avatarfile"><br>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2 pt-3 pl-2">
+                        <button th:align="center" class="btn btn-block btn-primary" id="resetpwd" type="button">重置密码</button>
+                    </div>
+                    <div class="col-md-2 pt-3 pl-2">
+                        <button th:align="center" class="btn btn-block btn-primary" id="savebtn" type="submit" >保存</button>
+                    </div>
+                    <div class="col-md-2 pt-3 pl-2">
+                        <a th:align="center" class="btn btn-block btn-primary" th:href="@{/UsersController/users}">返回</a>
+                    </div>
+                </div>
+            </form>
+
+
+
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js"></script>-->
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/popper.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+<script type="text/javascript">
+    $('#selectauthority').selectpicker({width: 'calc(100% - 130px)'});//设置下拉框框大小
+</script>
+<!-- Icons -->
+<script type="text/javascript" src="/js/feather.min.js"></script>
+<script>
+    feather.replace()
+</script>
+
+<script type="text/javascript">
+    //图片类型验证
+    function verificationPicFileType(file) {
+        var fileTypes = [".jpg", ".png"];
+        var filePath = file.value;
+        //当括号里面的值为0、空字符、false 、null 、undefined的时候就相当于false
+        if(filePath){
+            var isNext = false;
+            var fileEnd = filePath.substring(filePath.indexOf("."));
+            for (var i = 0; i < fileTypes.length; i++) {
+                if (fileTypes[i] == fileEnd) {
+                    isNext = true;
+                    break;
+                }
+            }
+            if (!isNext){
+                alert('不接受此文件类型');
+                file.value = "";
+                return false;
+            }else{
+                return true;
+            }
+        }else {
+            return false;
+        }
+    }
+
+    //图片大小验证
+    function verificationPicFileDimension(file) {
+        var fileSize = 0;
+        var fileMaxSize = 1024*4;//4M
+        var filePath = file.value;
+        if(filePath){
+            fileSize =file.files[0].size;
+            var size = fileSize / 1024;
+            if (size > fileMaxSize) {
+                alert("文件大小不能大于4M！");
+                file.value = "";
+                return false;
+            }else if (size <= 0) {
+                alert("文件大小不能为0M！");
+                file.value = "";
+                return false;
+            }
+            if(size<=fileMaxSize){
+                return true
+            }
+        }else{
+            return false;
+        }
+    }
+
+    //图片尺寸验证
+    function verificationPicFileSize(file) {
+        var filePath = file.value;
+        if(filePath){
+            //读取图片数据
+            var filePic = file.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                //加载图片获取图片真实宽度和高度
+                var image = new Image();
+                image.onload=function(){
+                    var width = image.width;
+                    var height = image.height;
+                    if (width == 250 && height == 250){
+                        return true;
+                    }else {
+                        alert("文件尺寸应为：250*200！");
+                        file.value = "";
+                        return false;
+                    }
+                };
+                image.src= data;
+            };
+            reader.readAsDataURL(filePic);
+        }else{
+            return false;
+        }
+    }
+
+    // 获取url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) {
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) {
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) {
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+    //上传头像显示
+    $(function () {
+        $('#avatarfile').change(function () {
+            check=verificationPicFileType(this);
+            check=verificationPicFileDimension(this);
+            check=verificationPicFileSize(this);
+            $('#avatar').attr('src', getObjectURL($(this)[0].files[0]))
+        });
+    });
+
+    //表单提交与信息验证
+    $(function () {
+        $('#inputuser').blur(function () {
+            var oldusername=$('#oldname').val().trim();
+            var username=$('#inputuser').val().trim();
+            var value={'username':username};
+            console.log(value['username']);
+            if(oldusername!=username) {
+                $.ajax({
+                        type: 'post',
+                        url: "/UsersController/checkuser",
+                        data: JSON.stringify(value),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (data) {
+                            $('#namsg').text(data['msg']);
+                            if (!data['success']) {
+                                $('#savebtn').attr('disabled', 'disabled');
+                            } else {
+                                $("#savebtn").removeAttr("disabled");//将按钮可用
+                            }
+                        }
+                    }
+                );
+            }else {
+                $('#namsg').text("");
+                $("#savebtn").removeAttr("disabled");//将按钮可用
+            }
+        });
+    });
+
+    $(function () {
+        $('#usersform').on('submit',function () {
+            var check=true;
+            var username=$('#inputuser').val().trim();
+            var password=$('#inputpassword').val().trim();
+            var confirmpawd=$('#confirmpassword').val().trim();
+            var selection=$('#selectauthority').val()
+            console.log(username.length);
+            if(username.length>20){
+                $('#namsg').text("账户长度不超过 20 个字符");
+                check=false
+            }
+            if(!selection){
+                $('#selectmsg').text("未选择用户权限");
+                check=false;
+            }
+            if(check)
+            {
+                $('#namsg').text("");
+                $('#pwdmsg').text("");
+                $('#confirmmsg').text("");
+                $('#selectmsg').text("");
+            }
+            return check;
+        });
+    });
+
+
+    //重置密码
+    $(function () {
+        $('#resetpwd').on('click',function () {
+            var uid=$('#uid').val();
+            var value={"uid":uid};
+            $.ajax({
+                type:'POST',
+                url:'/UsersController/reset',
+                data:JSON.stringify(value),
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                success:function (data) {
+                    alert(data['msg'])
+                }
+            });
+
+        });
+    });
+</script>
+
+</body>
+
+</html>

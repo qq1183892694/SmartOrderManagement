@@ -4,9 +4,24 @@ spring:
     password: root
     url: jdbc:mysql://47.98.248.3:3306/SmartOrderManagement?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF8
     driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false
+
+devtools:
+  restart:
+  #热部署生效
+    enabled: true
+  #设置重启的目录
+    additional-paths: resources/**,static/**,templates/**
+
 mybatis:
   type-aliases-package: com.example.demo.pojo
   mapper-locations: classpath:./java/com/example/demo/dao/xml/*.xml
+
 #  配置mybatis的目录
 server:
   port: 8080
+
+file:
+  profile: E:/project/SmartOrderManagement/src/file
+  imgfile: E:/project/SmartOrderManagement/src/file/img

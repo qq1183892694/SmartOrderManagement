@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.demo3.entity.Users">
-        <id column="userId" property="userId" />
+        <id column="uid" property="userId" />
         <result column="userLoginName" property="userLoginName" />
         <result column="userPassword" property="userPassword" />
         <result column="characterId" property="characterId" />

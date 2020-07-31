@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="js/vector.js"></script>
+<script type="text/javascript" src="/js/vector.js"></script>
 
 </head>
 <body>
@@ -18,15 +18,45 @@
 	<div id="output">
 		<div class="containerT">
 			<h1>智能点餐系统</h1>
-			<form class="form-signin" th:action="@{/LoginController/login}">
-				<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
-				<input type="text" name="Loginname" class="form-control" placeholder="员工编号" required="" autofocus="">
-				<input type="password" name="password" class="form-control" placeholder="密码" required="">
-				<button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
+			<form class="form-signin" >
+				<p id="msg" style="color:red;font-size:18px" ></p>
+				<input type="text" name="loginname" class="form-control" placeholder="账户" required="true" autofocus="true">
+				<input type="password" name="password" class="form-control" placeholder="密码" required="true">
+				<input type="text" name="verifyCode" class="form-control" placeholder="验证码" required="true">
+				<img alt="验证码" onclick = "this.src='/LoginController/getCode?d='+new Date()*1" src="/LoginController/getCode"/>
+				<button id="subtn" class="btn btn-lg btn-primary btn-block" type="button">登 录</button>
 			</form>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(function () {
+		$('#subtn').on('click',function () {
+			var username=$("input[name='loginname']").val();
+			var password=$("input[name='password']").val();
+			var verifyCode=$("input[name='verifyCode']").val();
+			var formvalue={'loginname':username,'password':password,"verifyCode":verifyCode};
+			var actions=false;
+			$.ajax({
+				url:"/LoginController/login",
+				type:"POST",
+				data:JSON.stringify(formvalue),
+				contentType:"application/json;charset=UTF-8",  //缺失会出现URL编码，无法转成json对象
+				dataType:'json',
+				success:function (data) {
+					if(!data["success"]){
+						$('#msg').text(data["msg"]);
+					}else{
+						$('#msg').text("");
+						$(window).attr('location',data['path']);
+					}
+				}
+			});
+
+		});
+	});
+</script>
 
 <script type="text/javascript">
     $(function(){
